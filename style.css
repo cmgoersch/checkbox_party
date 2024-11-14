@@ -10,8 +10,8 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
     grid-gap: 5px;
-    margin: 20px auto; 
-    width: 90%; 
+    margin: 20px auto;
+    width: 90%;
     max-width: 800px; 
 }
 
