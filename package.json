@@ -1,0 +1,15 @@
+{
+  "name": "checkbox_party",
+  "version": "1.0.0",
+  "description": "funny tool to understand grid",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "checkbox_party"
+  },
+  "author": "cmgoersch",
+  "license": "ISC"
+}
