@@ -6,16 +6,32 @@ let clickedCount = 0;
 // Lade den gespeicherten Zustand der Checkboxen aus dem LocalStorage
 const savedState = JSON.parse(localStorage.getItem('checkboxStates')) || [];
 
-// Erstelle die Checkboxen und wende den gespeicherten Zustand an
-for (let i = 0; i < 1000; i++) {
+// Funktion zum Erstellen einer Checkbox
+function createCheckbox(index) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'checkbox';
-    checkbox.dataset.index = i; // Speichert den Index als Attribut für die Identifikation
 
-    // Wenn ein gespeicherter Zustand vorhanden ist, Checkbox entsprechend setzen
-    if (savedState[i]) {
+    // Entferne Standarddarstellung der Checkbox
+    checkbox.style.appearance = 'none'; // Set appearance: none to hide default checkbox
+    checkbox.style.webkitAppearance = 'none';
+    checkbox.style.mozAppearance = 'none';
+    checkbox.style.border = 'none'; // Entferne Rahmen, falls vorhanden
+
+    // Füge das Hintergrundbild hinzu (falls CSS nicht greift)
+    checkbox.style.background = "url('img/window-icon.png') center center no-repeat";
+    checkbox.style.backgroundSize = "contain";
+    checkbox.style.width = '50px';
+    checkbox.style.height = '50px';
+
+    // Setze den benutzerdefinierten Cursor
+    checkbox.style.cursor = "url('img/hammer-icon-2.png'), auto";
+
+    // Wenn ein gespeicherter Zustand vorhanden ist, Checkbox ausblenden
+    if (savedState[index]) {
         checkbox.checked = true;
+        checkbox.style.transform = 'translateY(100px)';
+        checkbox.style.opacity = '0';
         clickedCount++;
     }
 
@@ -23,30 +39,52 @@ for (let i = 0; i < 1000; i++) {
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
             clickedCount++;
+            checkbox.style.transform = 'translateY(100px)';
+            checkbox.style.opacity = '0';
+    
+            // Ton abspielen
+            const glassSound = new Audio('sounds/glass-break.mp3');
+            glassSound.volume = 0.5; // Lautstärke einstellen
+            glassSound.play().catch(error => {
+                console.error('Ton konnte nicht abgespielt werden:', error);
+            });
         } else {
             clickedCount--;
+            checkbox.style.transform = 'none';
+            checkbox.style.opacity = '1';
         }
-        counter.textContent = `Angeklickte Checkboxen: ${clickedCount}`;
-
+        counter.textContent = `Eingeschlagene Fenster: ${clickedCount}`;
+    
         // Speichere den aktuellen Zustand aller Checkboxen
-        savedState[i] = checkbox.checked;
+        savedState[index] = checkbox.checked;
         localStorage.setItem('checkboxStates', JSON.stringify(savedState));
     });
 
+    return checkbox;
+}
+
+// Erstelle die Checkboxen und wende den gespeicherten Zustand an
+for (let i = 0; i < 1000; i++) {
+    const checkbox = createCheckbox(i);
     gridContainer.appendChild(checkbox);
 }
 
 // Aktualisiere den Counter beim Laden der Seite
-counter.textContent = `Angeklickte Checkboxen: ${clickedCount}`;
+counter.textContent = `Eingeschlagene Fenster: ${clickedCount}`;
 
 // Funktion für den Clear-All-Button
 clearButton.addEventListener('click', () => {
     // Setze alle Checkboxen zurück
     const checkboxes = document.querySelectorAll('.checkbox');
-    checkboxes.forEach(checkbox => checkbox.checked = false);
+    checkboxes.forEach((checkbox, index) => {
+        checkbox.checked = false;
+        checkbox.style.transform = 'none';
+        checkbox.style.opacity = '1';
+        savedState[index] = false; // Setze den gespeicherten Zustand zurück
+    });
 
     // Setze Counter und LocalStorage zurück
     clickedCount = 0;
-    counter.textContent = `Angeklickte Checkboxen: ${clickedCount}`;
-    localStorage.removeItem('checkboxStates'); // Lösche gespeicherten Zustand
+    counter.textContent = `Eingeschlagene Fenster: ${clickedCount}`;
+    localStorage.setItem('checkboxStates', JSON.stringify(savedState)); // Speichere den leeren Zustand
 });
