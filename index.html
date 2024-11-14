@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Grid mit 1000 Checkboxen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Responsive Grid mit 1000 Checkboxen</h1>
+    <div class="grid-container" id="grid-container"></div>
+
+    <script>
+        const gridContainer = document.getElementById('grid-container');
+
+        for (let i = 0; i < 1000; i++) {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'checkbox';
+            gridContainer.appendChild(checkbox);
+        }
+    </script>
+</body>
+</html>
