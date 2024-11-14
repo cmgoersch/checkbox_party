@@ -39,12 +39,17 @@ function createCheckbox(index) {
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
             clickedCount++;
-            // Übergang auslösen
             checkbox.style.transform = 'translateY(100px)';
             checkbox.style.opacity = '0';
+    
+            // Ton abspielen
+            const glassSound = new Audio('sounds/glass-break.mp3');
+            glassSound.volume = 0.5; // Lautstärke einstellen
+            glassSound.play().catch(error => {
+                console.error('Ton konnte nicht abgespielt werden:', error);
+            });
         } else {
             clickedCount--;
-            // Zurücksetzen des Übergangs
             checkbox.style.transform = 'none';
             checkbox.style.opacity = '1';
         }

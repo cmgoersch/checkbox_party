@@ -22,17 +22,17 @@ body {
     height: 50px;
     background: url("img/window-icon.png") center center no-repeat;
     background-size: contain;
-    transition: transform 0.5s ease, opacity 0.5s ease; /* Übergang */
+    transition: transform 0.5s ease, opacity 0.5s ease; 
 }
 
 .checkbox:checked {
     transform: translateY(100px); /* Nach unten verschieben */
-    opacity: 0; /* Unsichtbar machen */
+    opacity: 0; 
 }
 
 .checkbox:hover {
     transform: scale(1.4); /* Vergrößerung beim Hover */
-    transition: transform 0.3s ease; 
+    transition: transform 0.4s ease; 
 }
 
 h1 {
