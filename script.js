@@ -1,90 +1,79 @@
-const gridContainer = document.getElementById('grid-container');
-const counter = document.getElementById('counter');
-const clearButton = document.getElementById('clear-button');
-let clickedCount = 0;
+document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.getElementById("window-grid");
+    const clearButton = document.getElementById("clear-all");
+    const counter = document.getElementById("broken-counter");
+    const soundToggle = document.getElementById("sound-toggle");
+    const glassBreakSound = new Audio("sound/glass-break.mp3");
 
-// Lade den gespeicherten Zustand der Checkboxen aus dem LocalStorage
-const savedState = JSON.parse(localStorage.getItem('checkboxStates')) || [];
+    let isSoundOn = true;
+    let brokenCount = 0;
 
-// Funktion zum Erstellen einer Checkbox
-function createCheckbox(index) {
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.className = 'checkbox';
+    // Toggle für Sound
+    soundToggle.addEventListener("change", () => {
+        isSoundOn = soundToggle.checked;
+    });
 
-    // Entferne Standarddarstellung der Checkbox
-    checkbox.style.appearance = 'none'; // Set appearance: none to hide default checkbox
-    checkbox.style.webkitAppearance = 'none';
-    checkbox.style.mozAppearance = 'none';
-    checkbox.style.border = 'none'; // Entferne Rahmen, falls vorhanden
+    const waldoIndex = Math.floor(Math.random() * 1000);
+    const savedState = JSON.parse(localStorage.getItem("smashZoneState")) || [];
 
-    // Füge das Hintergrundbild hinzu (falls CSS nicht greift)
-    checkbox.style.background = "url('img/window-icon.png') center center no-repeat";
-    checkbox.style.backgroundSize = "contain";
-    checkbox.style.width = '50px';
-    checkbox.style.height = '50px';
+    for (let i = 0; i < 1000; i++) {
+        const windowDiv = document.createElement("div");
+        windowDiv.classList.add("window");
 
-    // Setze den benutzerdefinierten Cursor
-    checkbox.style.cursor = "url('img/hammer-icon-2.png'), auto";
+        if (savedState[i] === "smashed") {
+            windowDiv.classList.add("smashed");
+            brokenCount++;
+        }
 
-    // Wenn ein gespeicherter Zustand vorhanden ist, Checkbox ausblenden
-    if (savedState[index]) {
-        checkbox.checked = true;
-        checkbox.style.transform = 'translateY(100px)';
-        checkbox.style.opacity = '0';
-        clickedCount++;
+        if (i === waldoIndex) {
+            windowDiv.classList.add("waldo");
+        }
+
+        windowDiv.addEventListener("click", () => {
+            handleWindowClick(i, windowDiv);
+            handleWindowShake(windowDiv);
+        });
+
+        grid.appendChild(windowDiv);
     }
 
-    // Event Listener für Klicks
-    checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-            clickedCount++;
-            checkbox.style.transform = 'translateY(100px)';
-            checkbox.style.opacity = '0';
-    
-            // Ton abspielen
-            const glassSound = new Audio('sounds/glass-break.mp3');
-            glassSound.volume = 0.5; // Lautstärke einstellen
-            glassSound.play().catch(error => {
-                console.error('Ton konnte nicht abgespielt werden:', error);
-            });
+    counter.textContent = brokenCount;
+
+    function handleWindowClick(index, windowDiv) {
+        if (windowDiv.classList.contains("waldo")) return;
+
+        if (!windowDiv.classList.contains("smashed")) {
+            windowDiv.classList.add("smashed");
+            brokenCount++;
+            if (isSoundOn) {
+                glassBreakSound.currentTime = 0;
+                glassBreakSound.play().catch((err) => console.error(err));
+            }
         } else {
-            clickedCount--;
-            checkbox.style.transform = 'none';
-            checkbox.style.opacity = '1';
+            windowDiv.classList.remove("smashed");
+            brokenCount--;
         }
-        counter.textContent = `Eingeschlagene Fenster: ${clickedCount}`;
-    
-        // Speichere den aktuellen Zustand aller Checkboxen
-        savedState[index] = checkbox.checked;
-        localStorage.setItem('checkboxStates', JSON.stringify(savedState));
+
+        counter.textContent = brokenCount;
+        saveState();
+    }
+
+    function handleWindowShake(windowDiv) {
+        windowDiv.classList.add("shake");
+        setTimeout(() => windowDiv.classList.remove("shake"), 300);
+    }
+
+    function saveState() {
+        const state = Array.from(grid.children).map((child) =>
+            child.classList.contains("smashed") ? "smashed" : ""
+        );
+        localStorage.setItem("smashZoneState", JSON.stringify(state));
+    }
+
+    clearButton.addEventListener("click", () => {
+        Array.from(grid.children).forEach((child) => child.classList.remove("smashed"));
+        brokenCount = 0;
+        counter.textContent = brokenCount;
+        saveState();
     });
-
-    return checkbox;
-}
-
-// Erstelle die Checkboxen und wende den gespeicherten Zustand an
-for (let i = 0; i < 1000; i++) {
-    const checkbox = createCheckbox(i);
-    gridContainer.appendChild(checkbox);
-}
-
-// Aktualisiere den Counter beim Laden der Seite
-counter.textContent = `Eingeschlagene Fenster: ${clickedCount}`;
-
-// Funktion für den Clear-All-Button
-clearButton.addEventListener('click', () => {
-    // Setze alle Checkboxen zurück
-    const checkboxes = document.querySelectorAll('.checkbox');
-    checkboxes.forEach((checkbox, index) => {
-        checkbox.checked = false;
-        checkbox.style.transform = 'none';
-        checkbox.style.opacity = '1';
-        savedState[index] = false; // Setze den gespeicherten Zustand zurück
-    });
-
-    // Setze Counter und LocalStorage zurück
-    clickedCount = 0;
-    counter.textContent = `Eingeschlagene Fenster: ${clickedCount}`;
-    localStorage.setItem('checkboxStates', JSON.stringify(savedState)); // Speichere den leeren Zustand
 });

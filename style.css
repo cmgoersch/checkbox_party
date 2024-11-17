@@ -1,63 +1,146 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f5f5f5;
     text-align: center;
-    cursor: url("img/hammer-icon-2.png"), auto;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    cursor: url('img/hammer-icon-2.png'), auto;
 }
 
-.grid-container {
+body.hammer-click {
+    cursor: url('img/hammer-icon-2.png'), auto;
+    animation: hammer-wobble 0.2s linear;
+}
+
+@keyframes hammer-wobble {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+    75% { transform: rotate(-15deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.header {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.controls #broken-counter {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.sound-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.sound-toggle input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.sound-toggle .slider {
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 10px;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.sound-toggle input:checked + .slider {
+    background-color: #4caf50;
+}
+
+.sound-toggle .slider::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+}
+
+.sound-toggle input:checked + .slider::before {
+    transform: translateX(20px);
+}
+
+.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    grid-gap: 10px;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 800px;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 10px;
+    padding: 20px;
 }
 
-.checkbox {
-    cursor: url("img/hammer-icon-2.png"), auto;
+.grid .window {
     width: 50px;
     height: 50px;
-    background: url("img/window-icon.png") center center no-repeat;
-    background-size: contain;
-    transition: transform 0.5s ease, opacity 0.5s ease; 
+    background: url('img/window-icon.png') no-repeat center center / contain;
+    transition: transform 0.2s ease-in-out;
+    cursor: url('img/hammer-icon-2.png'), auto;
 }
 
-.checkbox:checked {
-    transform: translateY(100px); /* Nach unten verschieben */
-    opacity: 0; 
+.grid .window:hover {
+    transform: scale(1.1);
 }
 
-.checkbox:hover {
-    transform: scale(1.4); /* Vergrößerung beim Hover */
-    transition: transform 0.4s ease; 
+.grid .window.shake {
+    animation: shake 0.3s ease-in-out;
 }
 
-h1 {
-    margin-bottom: 10px;
+.grid .window.smashed {
+    background: url('img/smashed-icon.png') no-repeat center center / contain;
 }
 
-#counter {
-    margin-top: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
+.grid .window.waldo {
+    background: url('img/waldo-icon.png') no-repeat center center / contain;
 }
 
-#clear-button {
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #ff4d4d;
+@keyframes shake {
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0px); }
+}
+
+#clear-all {
+    background-color: #ff5722;
     color: #fff;
     border: none;
+    padding: 10px 20px;
+    margin: 20px auto;
+    font-size: 1em;
     border-radius: 5px;
-    cursor: pointer; /* Standard-Cursor für den Button */
-    display: block;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
 }
 
-#clear-button:hover {
-    background-color: #ff1a1a; /* Button wird dunkler beim Hover */
+#clear-all:hover {
+    background-color: #e64a19;
 }
