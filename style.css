@@ -8,8 +8,7 @@ body {
 }
 
 body.hammer-click {
-    cursor: url('img/hammer-icon-2.png'), auto;
-    animation: hammer-wobble 0.2s linear;
+    animation: hammer-wobble 0.7s linear;
 }
 
 @keyframes hammer-wobble {
@@ -56,8 +55,10 @@ body.hammer-click {
 
 .sound-toggle input[type="checkbox"] {
     position: absolute;
-    opacity: 0;
-    cursor: pointer;
+    opacity: 0; /* Unsichtbar, aber klickbar */
+    width: 100%; /* Sicherstellen, dass es den Bereich ausfüllt */
+    height: 100%;
+    cursor: pointer; /* Der Mauszeiger zeigt, dass es klickbar ist */
 }
 
 .sound-toggle .slider {
@@ -100,8 +101,7 @@ body.hammer-click {
     width: 50px;
     height: 50px;
     background: url('img/window-icon.png') no-repeat center center / contain;
-    transition: transform 0.2s ease-in-out;
-    cursor: url('img/hammer-icon-2.png'), auto;
+    transition: transform 0.2s;
 }
 
 .grid .window:hover {
@@ -114,10 +114,6 @@ body.hammer-click {
 
 .grid .window.smashed {
     background: url('img/smashed-icon.png') no-repeat center center / contain;
-}
-
-.grid .window.waldo {
-    background: url('img/waldo-icon.png') no-repeat center center / contain;
 }
 
 @keyframes shake {

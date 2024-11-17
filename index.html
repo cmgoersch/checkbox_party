@@ -11,7 +11,11 @@
         <h1>Smash Zone</h1>
         <div class="controls">
             <span>Eingeschlagene Fenster: <span id="broken-counter">0</span></span>
-            <img id="sound-icon" src="img/sound-on-icon.png" alt="Sound Icon" class="sound-toggle">
+            <div class="sound-toggle">
+                <label for="sound-toggle">Sound</label>
+                <input type="checkbox" id="sound-toggle" checked>
+                <span class="slider"></span>
+            </div>
         </div>
     </div>
     <div class="grid" id="window-grid"></div>
